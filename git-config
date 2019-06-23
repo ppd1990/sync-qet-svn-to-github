@@ -1,0 +1,11 @@
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+[svn-remote "svn"]
+        url = svn://svn.tuxfamily.org/svnroot/qet/qet
+        fetch = trunk:refs/remotes/git-svn
+[remote "origin"]
+        url = git@github.com:qelectrotech/qelectrotech-git-mirror.git
+        fetch = +refs/heads/*:refs/remotes/origin/*

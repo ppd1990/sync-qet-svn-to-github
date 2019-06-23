@@ -1,0 +1,14 @@
+language: minimal
+dist: xenial
+env:
+  global:
+    - GITHUB_REPO="git@github.com:qelectrotech/qelectrotech-git-mirror.git"
+script:
+  - openssl aes-256-cbc -K $encrypted_e353a9a9b066_key -iv $encrypted_e353a9a9b066_iv -in ./github_deploy_key.enc -out "$HOME/.ssh/github_deploy_key" -d
+  - chmod 600 "$HOME/.ssh/github_deploy_key" && printf "%s\n" "Host github.com" "  IdentityFile $HOME/.ssh/github_deploy_key" "  LogLevel ERROR" >> ~/.ssh/config
+  - git clone "$GITHUB_REPO" git-repo
+  - cp git-config git-repo/.git/config
+  - cd git-repo
+  - git update-ref refs/remotes/git-svn $(git rev-parse HEAD)
+  - sudo docker run -v $(pwd):/git-repo ubuntu:18.04 sh -c "apt update && apt install -y git git-svn && cd /git-repo && git svn rebase -q"
+  - git push origin master
